@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Team Synergy • FAQ</title>
+  <style>
+    :root{
+      --paper:#ffffff; --card:#ffffff;
+      --gold:#cfa435; --blue:#2a5298;
+      --fg-strong:#0f172a; --fg:#334155; --fg-soft:#64748b;
+      --border:#e5e7eb; --divider:#f1f5f9;
+      --radius:16px; --shadow:0 6px 24px rgba(0,0,0,.08);
+      --ease:cubic-bezier(.2,.8,.16,1);
+    }
+    body{margin:0; font:16px/1.6 Inter, ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; color:var(--fg); background:var(--paper); -webkit-font-smoothing:antialiased}
+    .wrap{max-width:900px; margin:0 auto; padding:42px 20px}
+
+    .head{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:22px}
+    .id{display:flex; gap:14px; align-items:center}
+    .seal{width:58px; height:58px; border-radius:14px; object-fit:cover; box-shadow:var(--shadow);}
+    .title{margin:0; font-size:1.7rem; font-weight:700; color:var(--fg-strong)}
+    .sub{margin-top:4px; color:var(--fg-soft); font-size:1.25rem; font-weight:500}
+    .motto{margin:4px 0 0; color:var(--fg-soft); font-style:italic; font-size:.9rem}
+
+    .search{margin-bottom:24px;}
+    .searchbox{position:relative}
+    .input{width:100%; padding:14px 46px 14px 52px; border:1px solid var(--border); border-radius:var(--radius); font-size:1rem; color:var(--fg-strong); box-shadow:var(--shadow); background:var(--card);}
+    .input:focus{outline:none; border-color:var(--blue)}
+    .input::placeholder{color:var(--fg-soft)}
+
+    /* Icon button (Lupe ⇄ ×) */
+    .icon-btn{position:absolute; left:14px; top:50%; transform:translateY(-50%); display:grid; place-items:center; width:28px; height:28px; border:none; background:transparent; color:var(--fg-soft); cursor:pointer; border-radius:8px; transition:color .25s var(--ease), transform .25s var(--ease)}
+    .icon-btn:hover{color:var(--blue); transform:translateY(-50%) scale(1.06)}
+    .icon-btn:focus-visible{outline:2px solid rgba(42,82,152,.35); outline-offset:2px}
+    .icon-search,.icon-clear{grid-area:1/1; width:20px; height:20px; transition:opacity .25s var(--ease), transform .35s var(--ease)}
+    .icon-clear{opacity:0; transform:rotate(-90deg) scale(.9)}
+    /* Morph wenn Text vorhanden */
+    .searchbox.has-text .icon-search{opacity:0; transform:rotate(90deg) scale(.9)}
+    .searchbox.has-text .icon-clear{opacity:1; transform:rotate(0deg) scale(1)}
+
+    .hint{margin-top:8px; color:var(--fg-soft); font-size:.85rem}
+
+    .card{border:1px solid var(--border); background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow)}
+    details.item{border-top:1px solid var(--divider)}
+    details.item:first-of-type{border-top:none}
+
+    summary.hdr{display:flex; align-items:center; gap:12px; list-style:none; padding:18px 20px; cursor:pointer; border-left:3px solid transparent}
+    summary.hdr::-webkit-details-marker{display:none}
+    details[open] > summary.hdr{border-left-color:var(--gold)}
+    summary.hdr:hover{border-left-color:var(--gold)}
+
+    .q{font-weight:600; font-size:1.1rem; line-height:1.5; color:var(--fg-strong); transition:color .25s var(--ease), background .25s var(--ease)}
+    details[open] .q{background:linear-gradient(90deg,var(--gold),var(--blue)); -webkit-background-clip:text; background-clip:text; color:transparent}
+
+    .chev{margin-left:auto; width:20px; height:20px; color:var(--blue); transition:transform .25s var(--ease), color .25s var(--ease)}
+    details[open] .chev{transform:rotate(180deg); color:var(--gold)}
+
+    .cont{padding:0 20px 20px 32px}
+    .ans{color:var(--fg)}
+
+    .empty{margin-top:16px; padding:16px; border:1px dashed var(--border); border-radius:var(--radius); text-align:center; color:var(--fg-soft)}
+    mark{background:linear-gradient(90deg,rgba(207,164,53,.25),rgba(42,82,152,.25)); padding:0 .15em; border-radius:4px}
+
+    /* --- Dev Test Output (optional) --- */
+    #test-output{margin-top:28px; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.85rem; color:#0f172a; background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px; padding:12px}
+    #test-output b{color:#065f46}
+    #test-output .fail{color:#991b1b}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="head">
+      <div class="id">
+        <img src="./logo.png" alt="Logo" class="seal" />
+        <div>
+          <h1 class="title">Team Synergy – Fragen & Antworten</h1>
+          <div class="sub">Wo Erfolg geteilt wird</div>
+          
+        </div>
+      </div>
+    </header>
+
+    <section class="search">
+      <!-- Fix: gib dem Container die erwartete ID "search" -->
+      <div class="searchbox" id="search">
+        <button id="iconBtn" class="icon-btn" type="button" aria-label="Suchen/Leeren">
+          <!-- Lupe -->
+          <svg class="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <!-- ✕ -->
+          <svg class="icon-clear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+        <input id="q" class="input" placeholder="Wonach suchst du? (z. B. Auszahlung, Kündigung)" />
+      </div>
+      <div class="hint" id="hint">Tippe, um zu filtern • Begriffe werden <mark>markiert</mark> • <kbd>Esc</kbd> oder × löscht</div>
+    </section>
+
+    <main>
+      <div class="card" id="accordion">
+        <!-- Item 1 -->
+        <details class="item">
+          <summary class="hdr">
+            <span class="q">Muss ich jeden Monat 100 $ bezahlen?</span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="cont"><div class="ans">Nein. Der Beitrag fällt nur in den ersten drei Monaten an, da die Vergütung drei Monate zeitversetzt ausgezahlt wird. Danach trägt sich dein Beitrag von allein – vorausgesetzt, du lädst die erforderlichen Bons hoch.</div></div>
+        </details>
+        <!-- Item 2 -->
+        <details class="item">
+          <summary class="hdr">
+            <span class="q">Wann erhalte ich meine erste Vergütung?</span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="cont"><div class="ans">Nach dem ersten Monat des Hochladens deiner Kassenbons ist das Cashback im Konto sichtbar. Ausgezahlt wird mit drei Monaten Verzögerung. Team‑Vergütungen kommen meist schneller.</div></div>
+        </details>
+        <!-- Item 3 -->
+        <details class="item">
+          <summary class="hdr">
+            <span class="q">In welcher Form wird ausgezahlt?</span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="cont"><div class="ans">Aktuell kannst du deine Vergütung direkt auf dein PayPal‑Konto überweisen lassen. Zukünftig ist auch eine Auszahlung in Kryptowährungen geplant.</div></div>
+        </details>
+        <!-- Item 4 -->
+        <details class="item">
+          <summary class="hdr">
+            <span class="q">Wie registriere ich einen Partner?</span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="cont"><div class="ans">Ausschließlich in einem 3er‑Zoom mit deinem Sponsor oder einem Team‑Leader. Du schaust entspannt zu und lernst gleichzeitig den Ablauf.</div></div>
+        </details>
+        <!-- Item 5 -->
+        <details class="item">
+          <summary class="hdr">
+            <span class="q">Was brauche ich für ein stabiles Standbein?</span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="cont"><div class="ans">Drei aktive Partner, die du selbst gesponsert hast. Für weitere Ränge zählen auch passive Partner (Einschreibungen aus deiner Downline). Für höhere Ränge müssen bestimmte Ränge in deiner Downline vertreten sein – aktive wie passive zählen.</div></div>
+        </details>
+        <!-- Item 6 -->
+        <details class="item">
+          <summary class="hdr">
+            <span class="q">Was macht unser System einzigartig?</span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="cont"><div class="ans">Wir nutzen beim Einschreiben bewusst die Links unserer Partner. So steigen sie schneller im Rang auf und kommen früher ins Verdienen. Das System ist darauf ausgelegt, andere erfolgreich zu machen – ihr Wachstum ist auch dein Wachstum.</div></div>
+        </details>
+        <!-- Item 7 -->
+        <details class="item">
+          <summary class="hdr">
+            <span class="q">Kann ich das auch ohne Teamaufbau nutzen?</span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="cont"><div class="ans">Ja. Allein durch das Hochladen deiner Bons kannst du monatlich zusätzliches Einkommen erzielen. Teamaufbau ist optional für mehr Vergütung.</div></div>
+        </details>
+        <!-- Item 8 -->
+        <details class="item">
+          <summary class="hdr">
+            <span class="q">Kann ich meinen Account wieder kündigen?</span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="cont"><div class="ans">Natürlich. Es gibt keine langfristige Bindung; du kannst jederzeit aussteigen.</div></div>
+        </details>
+        <!-- Item 9 -->
+        <details class="item">
+          <summary class="hdr">
+            <span class="q">Was, wenn jemand aus meinem Team aufhört?</span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="cont"><div class="ans">Ganz normal. Über die Zeit gleicht sich dein Netzwerk aus – mit jedem neuen aktiven Partner wächst deine Stabilität.</div></div>
+        </details>
+        <!-- Item 10 -->
+        <details class="item">
+          <summary class="hdr">
+            <span class="q">Wie viel Zeit muss ich investieren?</span>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <div class="cont"><div class="ans">Das Hochladen der Bons dauert nur wenige Minuten pro Woche. Der Zeitaufwand für Teamaufbau hängt von deinen Zielen und deiner Aktivität ab.</div></div>
+        </details>
+      </div>
+      <div class="empty" id="noResults" style="display:none">Keine Treffer. Versuch ein anderes Wort.</div>
+    </main>
+  </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Elements
+    const searchbox = document.getElementById('search'); // fix: richtige ID
+    const q = document.getElementById('q');
+    const iconBtn = document.getElementById('iconBtn');
+    const hint = document.getElementById('hint');
+    const noRes = document.getElementById('noResults');
+    const items = Array.from(document.querySelectorAll('details.item'));
+
+    // Snapshots
+    const originals = items.map(it => ({
+      el: it,
+      qEl: it.querySelector('.q'),
+      aEl: it.querySelector('.ans'),
+      qText: it.querySelector('.q').textContent,
+      aText: it.querySelector('.ans').textContent,
+    }));
+
+    // Helpers
+    function escapeHTML(s){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c])); }
+    function highlight(text, term){
+      if(!term) return escapeHTML(text);
+      const esc = escapeHTML(text);
+      const safe = term.replace(/[-\/\^$*+?.()|[\]{}]/g, '\$&');
+      const rx = new RegExp('(' + safe + ')', 'gi');
+      return esc.replace(rx, '<mark>$1</mark>');
+    }
+
+    function filter(val){
+      const term = (val || '').trim().toLowerCase();
+      let visible = 0;
+      originals.forEach(({el, qEl, aEl, qText, aText}) => {
+        if(!term){
+          el.style.display = '';
+          qEl.innerHTML = escapeHTML(qText);
+          aEl.innerHTML = escapeHTML(aText);
+          el.open = false;
+          visible++;
+          return;
+        }
+        const match = qText.toLowerCase().includes(term) || aText.toLowerCase().includes(term);
+        if(match){
+          el.style.display = '';
+          qEl.innerHTML = highlight(qText, term);
+          aEl.innerHTML = highlight(aText, term);
+          // el.open bleibt unverändert (Treffer bleiben zu)
+          visible++;
+        } else {
+          el.style.display = 'none';
+          el.open = false;
+        }
+      });
+      if(noRes) noRes.style.display = visible ? 'none' : 'block';
+      if(hint){ if(term){ hint.textContent = visible ? `${visible} Treffer` : 'Keine Treffer'; } else { hint.textContent = ''; } }
+    }
+
+    // Debounce
+    function debounce(fn, delay=120){
+      let t;
+      const w = (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), delay); };
+      w.cancel = () => { clearTimeout(t); };
+      return w;
+    }
+    const debouncedFilter = debounce(filter, 120);
+
+    // Events
+    if(q){
+      q.addEventListener('input', (e) => {
+        const val = e.target.value;
+        if(searchbox) searchbox.classList.toggle('has-text', val.trim().length > 0);
+        debouncedFilter(val);
+      });
+    }
+
+    if(iconBtn){
+      iconBtn.addEventListener('click', () => {
+        if(searchbox && searchbox.classList.contains('has-text')){
+          q.value = '';
+          searchbox.classList.remove('has-text');
+          debouncedFilter.cancel?.();
+          filter('');
+          q.focus();
+        } else {
+          q.focus();
+        }
+      });
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        q.value = '';
+        if(searchbox) searchbox.classList.remove('has-text');
+        debouncedFilter.cancel?.();
+        filter('');
+        q.focus();
+      }
+    });
+
+    // Init
+    if(searchbox) searchbox.classList.toggle('has-text', q.value.trim().length > 0);
+    filter(q.value);
+
+    // Tests entfernt für Produktion
+  });
+</script>
+</body>
+</html>
